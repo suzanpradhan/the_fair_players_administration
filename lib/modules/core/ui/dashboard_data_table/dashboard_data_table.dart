@@ -5,7 +5,6 @@ import 'package:the_fair_players_administration/modules/core/ui/dashboard_data_t
 import '../../theme/app_constants.dart';
 import '../../widgets/loader_widger.dart';
 import '../lazy_scroll_view.dart';
-import 'dashboard_data_widget.dart';
 
 class DashboardDataTable extends StatelessWidget {
   final List<DashboardDataHeaderWidget> headers;

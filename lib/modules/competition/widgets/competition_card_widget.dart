@@ -12,6 +12,7 @@ import '../../core/extensions/widget_extensions.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_group_widget.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_widget.dart';
 import '../../core/ui/fair_players_icon_icons.dart';
+import '../../core/widgets/confirmation_dialog.dart';
 import '../models/competition_model.dart';
 
 class CompetitionCardWidget extends DashboardDataGroupWidget {
@@ -28,30 +29,52 @@ class CompetitionCardWidget extends DashboardDataGroupWidget {
       : super(key: key, datas: [
           DashboardDataWidget(
               flex: 1,
-              child: Center(
-                  child: Text(
-                (listOfCompetitions[index].competitionName ?? "N/A").toString(),
-                style: Theme.of(context).textTheme.labelLarge!,
-              ))),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      (listOfCompetitions[index].competitionName ?? "N/A")
+                          .toString(),
+                      style: Theme.of(context).textTheme.labelLarge!,
+                    ),
+                  ),
+                ],
+              )),
           DashboardDataWidget(
               flex: 1,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.padxs),
                 child: Row(
                   children: [
-                    Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
+                    (listOfCompetitions[index].adminImage != null)
+                        ? ClipRRect(
                             borderRadius: BorderRadius.circular(42),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: (listOfCompetitions[index].adminImage !=
-                                        null)
-                                    ? NetworkImage(
-                                        listOfCompetitions[index].adminImage!)
-                                    : const AssetImage(AppAssets.noProfileImage)
-                                        as ImageProvider))),
+                            child: FadeInImage.assetNetwork(
+                              width: 42,
+                              height: 42,
+                              placeholder: AppAssets.noProfileImage,
+                              image: listOfCompetitions[index].adminImage!,
+                              fit: BoxFit.cover,
+                              imageErrorBuilder: (context, object, stackTrace) {
+                                return ClipRRect(
+                                    borderRadius: BorderRadius.circular(42),
+                                    child: Image.asset(
+                                      width: 42,
+                                      height: 42,
+                                      AppAssets.noProfileImage,
+                                      fit: BoxFit.cover,
+                                    ));
+                              },
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(42),
+                            child: Image.asset(
+                              width: 42,
+                              height: 42,
+                              AppAssets.noProfileImage,
+                              fit: BoxFit.cover,
+                            )),
                     SizedBox(
                       width: AppConstants.pads,
                     ),
@@ -75,6 +98,7 @@ class CompetitionCardWidget extends DashboardDataGroupWidget {
                   child: Text(
                 (listOfCompetitions[index].sportsName ?? "N/A").toString(),
                 style: Theme.of(context).textTheme.labelLarge!,
+                textAlign: TextAlign.center,
               ))),
           DashboardDataWidget(
               flex: 1,
@@ -135,10 +159,13 @@ class CompetitionCardWidget extends DashboardDataGroupWidget {
                             const PopupMenuDivider(),
                           PopupMenuItem(
                               onTap: () {
-                                context.read<GetAllCompetitionsBloc>().add(
-                                    DeleteCompetitionAttempt(
-                                        competitionModel:
-                                            listOfCompetitions[index]));
+                                ConfirmationDialog.showDeleteDialog(context,
+                                    action: () {
+                                  context.read<GetAllCompetitionsBloc>().add(
+                                      DeleteCompetitionAttempt(
+                                          competitionModel:
+                                              listOfCompetitions[index]));
+                                });
                               },
                               height: 32,
                               child: Row(

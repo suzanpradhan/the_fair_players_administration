@@ -22,3 +22,11 @@ class GetAllUsersAttempt extends GetAllUsersEvent {
   @override
   List<Object?> get props => [searchValue];
 }
+
+class DeleteUserAttempt extends GetAllUsersEvent {
+  final UserModel userModel;
+  const DeleteUserAttempt({required this.userModel});
+
+  @override
+  List<Object> get props => [userModel];
+}

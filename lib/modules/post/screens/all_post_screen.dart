@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_fair_players_administration/modules/core/widgets/loader_widger.dart';
@@ -47,9 +45,7 @@ class _AllPostScreenState extends State<AllPostScreen> {
       child: BlocProvider(
         create: (context) => getUserPostBloc,
         child: DashboardWrapper(
-          appBar: const DashboardAppBar(
-            isCountryFilterEnable: true,
-          ),
+          appBar: const DashboardAppBar(),
           key: key,
           title: widget.title,
           subtitle: context.vRouter.queryParameters["username"] ?? "",

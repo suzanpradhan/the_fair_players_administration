@@ -3,7 +3,8 @@ import 'package:the_fair_players_administration/modules/analytics/repositories/a
 
 class AnalyticsModel {
   final String title;
-  final Stream<DatabaseEvent> Function({required double timeszone}) stream;
+  final Stream<DatabaseEvent> Function(
+      {required double timeszone, String? country}) stream;
 
   const AnalyticsModel({required this.title, required this.stream});
 }

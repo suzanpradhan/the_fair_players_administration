@@ -12,6 +12,7 @@ import '../../core/extensions/widget_extensions.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_group_widget.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_widget.dart';
 import '../../core/ui/fair_players_icon_icons.dart';
+import '../../core/widgets/confirmation_dialog.dart';
 import '../models/club_model.dart';
 
 class ClubCardWidget extends DashboardDataGroupWidget {
@@ -32,18 +33,25 @@ class ClubCardWidget extends DashboardDataGroupWidget {
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.padxs),
                 child: Row(
                   children: [
-                    Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
+                    (listOfClubs[index].clubImage != null)
+                        ? ClipRRect(
                             borderRadius: BorderRadius.circular(42),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: (listOfClubs[index].clubImage != null)
-                                    ? NetworkImage(
-                                        listOfClubs[index].clubImage!)
-                                    : const AssetImage(AppAssets.noProfileImage)
-                                        as ImageProvider))),
+                            child: FadeInImage.assetNetwork(
+                              width: 42,
+                              height: 42,
+                              placeholder: AppAssets.noProfileImage,
+                              image: listOfClubs[index].clubImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(42),
+                            child: Image.asset(
+                              width: 42,
+                              height: 42,
+                              AppAssets.noProfileImage,
+                              fit: BoxFit.cover,
+                            )),
                     SizedBox(
                       width: AppConstants.pads,
                     ),
@@ -60,18 +68,35 @@ class ClubCardWidget extends DashboardDataGroupWidget {
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.padxs),
                 child: Row(
                   children: [
-                    Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
+                    (listOfClubs[index].adminImage != null)
+                        ? ClipRRect(
                             borderRadius: BorderRadius.circular(42),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: (listOfClubs[index].adminImage != null)
-                                    ? NetworkImage(
-                                        listOfClubs[index].adminImage!)
-                                    : const AssetImage(AppAssets.noProfileImage)
-                                        as ImageProvider))),
+                            child: FadeInImage.assetNetwork(
+                              width: 42,
+                              height: 42,
+                              placeholder: AppAssets.noProfileImage,
+                              image: listOfClubs[index].adminImage!,
+                              fit: BoxFit.cover,
+                              imageErrorBuilder: (context, object, stackTrace) {
+                                return ClipRRect(
+                                    borderRadius: BorderRadius.circular(42),
+                                    child: Image.asset(
+                                      width: 42,
+                                      height: 42,
+                                      AppAssets.noProfileImage,
+                                      fit: BoxFit.cover,
+                                    ));
+                              },
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(42),
+                            child: Image.asset(
+                              width: 42,
+                              height: 42,
+                              AppAssets.noProfileImage,
+                              fit: BoxFit.cover,
+                            )),
                     SizedBox(
                       width: AppConstants.pads,
                     ),
@@ -139,9 +164,12 @@ class ClubCardWidget extends DashboardDataGroupWidget {
                             const PopupMenuDivider(),
                           PopupMenuItem(
                               onTap: () {
-                                context.read<GetAllClubsBloc>().add(
-                                    DeleteClubAttempt(
-                                        clubModel: listOfClubs[index]));
+                                ConfirmationDialog.showDeleteDialog(context,
+                                    action: () {
+                                  context.read<GetAllClubsBloc>().add(
+                                      DeleteClubAttempt(
+                                          clubModel: listOfClubs[index]));
+                                });
                               },
                               height: 32,
                               child: Row(

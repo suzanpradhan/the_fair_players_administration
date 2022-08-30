@@ -8,3 +8,13 @@ abstract class GetCountriesEvent extends Equatable {
 }
 
 class GetCountriesAttempt extends GetCountriesEvent {}
+
+class SearchCountriesAttempt extends GetCountriesEvent {
+  final String searchString;
+  final List<Country> listOfCountries;
+  const SearchCountriesAttempt(
+      {required this.searchString, required this.listOfCountries});
+
+  @override
+  List<Object> get props => [searchString, listOfCountries];
+}

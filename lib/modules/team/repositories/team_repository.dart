@@ -88,23 +88,38 @@ class TeamRepository implements ChatRepository, DeleteRepository {
     String teamAdminId = await getRoomAdminId(teamId: teamId);
     log(teamAdminId, name: "sendAdminMessage");
     log(teamId, name: "sendAdminMessage");
-    DatabaseReference teamMessageReference = FirebaseDatabaseService()
+    DatabaseReference teamMembersReference = FirebaseDatabaseService()
+        .getReference("Teams")
+        .child(teamId)
+        .child("Members");
+    DatabaseReference teamChatReference = FirebaseDatabaseService()
         .getReference("Chat")
         .child(teamAdminId)
-        .child("MessageList")
+        .child("ChatList")
         .child(teamId);
-    await teamMessageReference
-        .push()
-        .set(messageModel.toJson())
-        .whenComplete(() {
-      flag = true;
+    teamMembersReference.get().then((value) async {
+      for (var element in value.children) {
+        await FirebaseDatabaseService()
+            .getReference("Chat")
+            .child(element.child("uid").value! as String)
+            .child("MessageList")
+            .child(teamId)
+            .push()
+            .set(messageModel.toJson())
+            .whenComplete(() {});
+      }
     });
+    await teamChatReference.update(messageModel.toRecentMessageJson());
+    flag = true;
     return flag;
   }
 
   @override
-  Future<DataSnapshot> entitySnapshotFunction(String? key) =>
-      getAllTeamsSnapshot(key);
+  Future<DataSnapshot> entitySnapshotFunction(String? key) {
+    DatabaseReference teamReference =
+        FirebaseDatabaseService().getReference("Teams");
+    return teamReference.get();
+  }
 
   @override
   String? getAdminIdFromSnapshot({required DataSnapshot snapshot}) {
@@ -131,15 +146,59 @@ class TeamRepository implements ChatRepository, DeleteRepository {
   }
 
   @override
-  Future<bool> deleteModel(String? key) async {
+  Future<bool> deleteModel({String? key, String? extraKey}) async {
     try {
-      await FirebaseDatabaseService()
+      DatabaseReference teamMembersReference = FirebaseDatabaseService()
           .getReference("Teams")
           .child(key!)
+          .child("Members");
+      teamMembersReference.get().then((value) async {
+        for (var element in value.children) {
+          await FirebaseDatabaseService()
+              .getReference("Chat")
+              .child(element.child("uid").value! as String)
+              .child("ChatList")
+              .child(key)
+              .remove();
+          await FirebaseDatabaseService()
+              .getReference("Chat")
+              .child(element.child("uid").value! as String)
+              .child("MessageList")
+              .child(key)
+              .remove();
+        }
+      });
+      await FirebaseDatabaseService().getReference("Teams").child(key).remove();
+      await FirebaseDatabaseService()
+          .getReference("TeamsPostComments")
+          .child(key)
+          .remove();
+      await FirebaseDatabaseService()
+          .getReference("TeamsPosts")
+          .child(key)
           .remove();
       return true;
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  Future<void> deleteMessage(String uid, String teamId, String key) async {
+    DatabaseReference teamMembersReference = FirebaseDatabaseService()
+        .getReference("Teams")
+        .child(uid)
+        .child("Members");
+    teamMembersReference.get().then((value) async {
+      for (var element in value.children) {
+        await FirebaseDatabaseService()
+            .getReference("Chat")
+            .child(element.child("uid").value! as String)
+            .child("MessageList")
+            .child(uid)
+            .child(key)
+            .remove();
+      }
+    });
   }
 }

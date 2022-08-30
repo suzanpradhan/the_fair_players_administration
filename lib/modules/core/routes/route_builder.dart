@@ -15,6 +15,7 @@ import 'package:the_fair_players_administration/modules/lestplay/screens/all_com
 import 'package:the_fair_players_administration/modules/post/screens/all_post_screen.dart';
 import 'package:the_fair_players_administration/modules/team/repositories/team_repository.dart';
 import 'package:the_fair_players_administration/modules/team/screens/all_teams_list.dart';
+import 'package:the_fair_players_administration/modules/user/repositories/user_repository.dart';
 import 'package:the_fair_players_administration/modules/user/screens/all_users_list.dart';
 import 'package:vrouter/vrouter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,7 +84,7 @@ List<VRouteElement> buildRoutes(BuildContext context) {
                           opacity: animation,
                           child: child,
                         ),
-                    widget: AllUsersList(
+                    widget: const AllUsersList(
                       segment: USER_SEGMENT,
                       title: "All Users",
                       subtitle: "",
@@ -106,17 +107,19 @@ List<VRouteElement> buildRoutes(BuildContext context) {
                                   ),
                           widget: const AllPostScreen(title: "All Post")),
                     ]),
-                // VWidget(
-                //     path: "$CHAT_SEGMENT/$ALL_SEGMENT",
-                //     buildTransition: (animation, secondaryAnimation, child) =>
-                //         FadeTransition(
-                //           opacity: animation,
-                //           child: child,
-                //         ),
-                //     widget: const ChatScreen(
-                //       title: "All Chat List",
-                //       subtitle: "Users",
-                //     )),
+                VWidget.builder(
+                    path: "$CHAT_SEGMENT/$ALL_SEGMENT",
+                    buildTransition: (animation, secondaryAnimation, child) =>
+                        FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                    builder: (BuildContext context, VRouterData vRouterData) {
+                      return ChatScreen(
+                          title: "All Chat List",
+                          subtitle: "Users",
+                          chatRepository: context.read<UserRepository>());
+                    })
               ]),
           VNester(
               path: "/$TEAM_SEGMENT",

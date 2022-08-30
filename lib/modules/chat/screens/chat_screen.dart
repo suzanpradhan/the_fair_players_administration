@@ -3,17 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:the_fair_players_administration/modules/chat/blocs/delete_message/delete_message_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/blocs/get_chat_rooms/get_chat_rooms_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/blocs/room_message_list/room_message_list_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/blocs/send_message/send_message_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/repositories/chat_repository.dart';
-import 'package:the_fair_players_administration/modules/team/repositories/team_repository.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../core/theme/app_constants.dart';
 import '../../core/wrapper/dashboard_wrapper.dart';
 import '../../dashboard_app_bar/widgets/dashboard_app_bar.dart';
 import '../blocs/chat_navigation/chat_navigation_bloc.dart';
+import '../blocs/search_chat_room/search_chat_room_bloc.dart';
 import '../widgets/chat_list_area.dart';
 import '../widgets/chat_room_area.dart';
 
@@ -68,7 +69,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 RoomMessageListBloc(chatRepository: widget.chatRepository)),
         BlocProvider(
             create: (context) =>
-                SendMessageBloc(chatRepository: widget.chatRepository))
+                SendMessageBloc(chatRepository: widget.chatRepository)),
+        BlocProvider(
+            create: (context) =>
+                DeleteMessageBloc(chatRepository: widget.chatRepository)),
+        BlocProvider(create: ((context) => SearchChatRoomBloc())),
       ],
       child: BlocListener<GetChatRoomsBloc, GetChatRoomsState>(
         listener: (context, state) {
@@ -82,9 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: BlocBuilder<GetChatRoomsBloc, GetChatRoomsState>(
           builder: (context, state) {
             return DashboardWrapper(
-              appBar: const DashboardAppBar(
-                isCountryFilterEnable: true,
-              ),
+              appBar: const DashboardAppBar(),
               key: key,
               title: widget.title,
               subtitle: widget.subtitle,

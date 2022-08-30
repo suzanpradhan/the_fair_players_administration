@@ -5,13 +5,13 @@ import 'package:the_fair_players_administration/modules/lestplay/repositories/le
 import 'package:vrouter/vrouter.dart';
 
 import '../../core/routes/app_routes.dart';
-import '../../core/theme/app_assets.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_constants.dart';
 import '../../core/extensions/widget_extensions.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_group_widget.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_widget.dart';
 import '../../core/ui/fair_players_icon_icons.dart';
+import '../../core/widgets/confirmation_dialog.dart';
 import '../models/letsplay_model.dart';
 
 class LetsPlayCardWidget extends DashboardDataGroupWidget {
@@ -26,13 +26,6 @@ class LetsPlayCardWidget extends DashboardDataGroupWidget {
       required this.segment,
       required this.context})
       : super(key: key, datas: [
-          DashboardDataWidget(
-              flex: 1,
-              child: Center(
-                  child: Text(
-                (listOfLetsPlay[index].uid ?? "N/A").toString(),
-                style: Theme.of(context).textTheme.labelLarge!,
-              ))),
           DashboardDataWidget(
               flex: 1,
               child: Center(
@@ -110,9 +103,13 @@ class LetsPlayCardWidget extends DashboardDataGroupWidget {
                             const PopupMenuDivider(),
                           PopupMenuItem(
                               onTap: () {
-                                context.read<GetAllLetsPlayBloc>().add(
-                                    DeleteLetsPlayAttempt(
-                                        letsPlayModel: listOfLetsPlay[index]));
+                                ConfirmationDialog.showDeleteDialog(context,
+                                    action: () {
+                                  context.read<GetAllLetsPlayBloc>().add(
+                                      DeleteLetsPlayAttempt(
+                                          letsPlayModel:
+                                              listOfLetsPlay[index]));
+                                });
                               },
                               height: 32,
                               child: Row(

@@ -30,6 +30,7 @@ class GetUserPostBloc extends Bloc<GetUserPostEvent, GetUserPostState> {
             listOfPosts: listOfPosts.reversed.toList(), hasMore: true));
       }
     });
+    on<DeletePostAttempt>((event, emit) => _handleDeletePostEvent(event, emit));
   }
 
   Future<List<PostModel>> getListOfUsers({required String uid}) async {
@@ -43,5 +44,13 @@ class GetUserPostBloc extends Bloc<GetUserPostEvent, GetUserPostState> {
       lastDocumentKey = listOfUsers[0].uid;
     }
     return listOfUsers;
+  }
+
+  _handleDeletePostEvent(
+      DeletePostAttempt event, Emitter<GetUserPostState> emit) async {
+    postRepostitory.deleteModel(
+        key: event.postModel.uid, extraKey: event.postModel.userId);
+    emit((state as GotAllUsersPostsState)
+        .deletePost(postModel: event.postModel));
   }
 }

@@ -12,3 +12,8 @@ class ChangeToDayAnalytic extends AnalyticDatesEvent {}
 class ChangeToWeekAnalytic extends AnalyticDatesEvent {}
 
 class ChangeToMonthAnalytic extends AnalyticDatesEvent {}
+
+class ChangeCountryAnalytic extends AnalyticDatesEvent {
+  final String country;
+  const ChangeCountryAnalytic({required this.country});
+}

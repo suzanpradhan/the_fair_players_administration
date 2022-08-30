@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/blocs/get_chat_rooms/get_chat_rooms_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/blocs/room_message_list/room_message_list_bloc.dart';
-import 'package:the_fair_players_administration/modules/club/blocs/get_all_clubs/get_all_clubs_bloc.dart';
 
 import '../../core/theme/app_assets.dart';
 import '../../core/theme/app_constants.dart';
@@ -67,7 +64,7 @@ class ChatRoomArea extends StatelessWidget {
             Expanded(
                 child: Padding(
               padding: EdgeInsets.symmetric(horizontal: AppConstants.padL),
-              child: MessageListWidget(),
+              child: const MessageListWidget(),
             )),
             Container(
               padding: EdgeInsets.only(

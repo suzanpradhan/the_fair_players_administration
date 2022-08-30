@@ -12,6 +12,7 @@ import '../../core/extensions/widget_extensions.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_group_widget.dart';
 import '../../core/ui/dashboard_data_table/dashboard_data_widget.dart';
 import '../../core/ui/fair_players_icon_icons.dart';
+import '../../core/widgets/confirmation_dialog.dart';
 import '../models/team_model.dart';
 
 class TeamCardWidget extends DashboardDataGroupWidget {
@@ -32,18 +33,25 @@ class TeamCardWidget extends DashboardDataGroupWidget {
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.padxs),
                 child: Row(
                   children: [
-                    Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
+                    (listOfTeams[index].teamImage != null)
+                        ? ClipRRect(
                             borderRadius: BorderRadius.circular(42),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: (listOfTeams[index].teamImage != null)
-                                    ? NetworkImage(
-                                        listOfTeams[index].teamImage!)
-                                    : const AssetImage(AppAssets.noProfileImage)
-                                        as ImageProvider))),
+                            child: FadeInImage.assetNetwork(
+                              width: 42,
+                              height: 42,
+                              placeholder: AppAssets.noProfileImage,
+                              image: listOfTeams[index].teamImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(42),
+                            child: Image.asset(
+                              width: 42,
+                              height: 42,
+                              AppAssets.noProfileImage,
+                              fit: BoxFit.cover,
+                            )),
                     SizedBox(
                       width: AppConstants.pads,
                     ),
@@ -60,18 +68,25 @@ class TeamCardWidget extends DashboardDataGroupWidget {
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.padxs),
                 child: Row(
                   children: [
-                    Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
+                    (listOfTeams[index].adminImage != null)
+                        ? ClipRRect(
                             borderRadius: BorderRadius.circular(42),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: (listOfTeams[index].adminImage != null)
-                                    ? NetworkImage(
-                                        listOfTeams[index].adminImage!)
-                                    : const AssetImage(AppAssets.noProfileImage)
-                                        as ImageProvider))),
+                            child: FadeInImage.assetNetwork(
+                              width: 42,
+                              height: 42,
+                              placeholder: AppAssets.noProfileImage,
+                              image: listOfTeams[index].adminImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(42),
+                            child: Image.asset(
+                              width: 42,
+                              height: 42,
+                              AppAssets.noProfileImage,
+                              fit: BoxFit.cover,
+                            )),
                     SizedBox(
                       width: AppConstants.pads,
                     ),
@@ -139,9 +154,12 @@ class TeamCardWidget extends DashboardDataGroupWidget {
                             const PopupMenuDivider(),
                           PopupMenuItem(
                               onTap: () {
-                                context.read<GetAllTeamsBloc>().add(
-                                    DeleteTeamAttempt(
-                                        teamModel: listOfTeams[index]));
+                                ConfirmationDialog.showDeleteDialog(context,
+                                    action: () {
+                                  context.read<GetAllTeamsBloc>().add(
+                                      DeleteTeamAttempt(
+                                          teamModel: listOfTeams[index]));
+                                });
                               },
                               height: 32,
                               child: Row(

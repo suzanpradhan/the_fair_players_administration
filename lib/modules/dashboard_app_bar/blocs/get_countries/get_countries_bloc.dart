@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:the_fair_players_administration/modules/core/error_handling/failure.dart';
@@ -14,6 +16,8 @@ class GetCountriesBloc extends Bloc<GetCountriesEvent, GetCountriesState> {
     on<GetCountriesEvent>((event, emit) {});
     on<GetCountriesAttempt>(
         (event, emit) => _handleGetCountriesAttemptEvent(event, emit));
+    on<SearchCountriesAttempt>(
+        (event, emit) => _handleSearchAttemptEvent(event, emit));
   }
 
   _handleGetCountriesAttemptEvent(
@@ -25,5 +29,12 @@ class GetCountriesBloc extends Bloc<GetCountriesEvent, GetCountriesState> {
     } catch (e) {
       emit(GetCountriesFailedState(failure: Failure(message: e.toString())));
     }
+  }
+
+  _handleSearchAttemptEvent(
+      SearchCountriesAttempt event, Emitter<GetCountriesState> emit) async {
+    emit(GotCountriesSuccessState(
+        countries: (state as GotCountriesSuccessState)
+            .searchCountries(event.searchString)));
   }
 }

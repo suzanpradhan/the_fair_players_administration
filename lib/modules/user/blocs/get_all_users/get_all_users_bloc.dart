@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -31,6 +33,7 @@ class GetAllUsersBloc extends Bloc<GetAllUsersEvent, GetAllUsersState> {
             listOfUsers: listOfUsers.reversed.toList(), hasMore: true));
       }
     });
+    on<DeleteUserAttempt>((event, emit) => _handleDeleteUserEvent(event, emit));
   }
 
   Future<List<UserModel>> getListOfUsers(String? searchValue) async {
@@ -44,5 +47,11 @@ class GetAllUsersBloc extends Bloc<GetAllUsersEvent, GetAllUsersState> {
       lastDocumentKey = listOfUsers[0].uid;
     }
     return listOfUsers;
+  }
+
+  _handleDeleteUserEvent(
+      DeleteUserAttempt event, Emitter<GetAllUsersState> emit) async {
+    userRepository.deleteModel(key: event.userModel.uid);
+    emit((state as GotAllUsersState).deleteTeam(team: event.userModel));
   }
 }

@@ -49,7 +49,7 @@ class GetAllClubsBloc extends Bloc<GetAllClubsEvent, GetAllClubsState> {
 
   _handleDeleteClubEvent(
       DeleteClubAttempt event, Emitter<GetAllClubsState> emit) async {
-    clubRepository.deleteModel(event.clubModel.uid);
+    clubRepository.deleteModel(key: event.clubModel.uid);
     emit((state as GotAllClubsState).deleteClub(club: event.clubModel));
   }
 }

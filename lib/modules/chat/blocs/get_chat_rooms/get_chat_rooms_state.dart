@@ -1,7 +1,10 @@
 part of 'get_chat_rooms_bloc.dart';
 
-abstract class GetChatRoomsState {
+abstract class GetChatRoomsState extends Equatable {
   const GetChatRoomsState();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class GetChatRoomsInitial extends GetChatRoomsState {}
@@ -43,6 +46,9 @@ class GotChatRoomsSuccessState extends GetChatRoomsState {
         hasMore: listOfChatRooms.isNotEmpty,
         selectedChatRoom: selectedChatRoom);
   }
+
+  @override
+  List<Object?> get props => [listOfChatRooms, hasMore, selectedChatRoom];
 }
 
 class GetChatRoomsFailedState extends GetChatRoomsState {

@@ -1,10 +1,7 @@
 part of 'get_user_post_bloc.dart';
 
-abstract class GetUserPostState extends Equatable {
+abstract class GetUserPostState {
   const GetUserPostState();
-
-  @override
-  List<Object> get props => [];
 }
 
 class GetUserPostInitial extends GetUserPostState {}
@@ -24,6 +21,13 @@ class GotAllUsersPostsState extends GetUserPostState {
     }
     return GotAllUsersPostsState(
         listOfPosts: this.listOfPosts, hasMore: listOfPosts.isNotEmpty);
+  }
+
+  GotAllUsersPostsState deletePost({required PostModel postModel}) {
+    if (listOfPosts.isNotEmpty) {
+      listOfPosts.remove(postModel);
+    }
+    return GotAllUsersPostsState(listOfPosts: listOfPosts, hasMore: hasMore);
   }
 }
 

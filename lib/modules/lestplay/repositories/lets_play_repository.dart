@@ -41,8 +41,11 @@ class LetsPlayRepository implements ChatRepository, DeleteRepository {
   }
 
   @override
-  Future<DataSnapshot> entitySnapshotFunction(String? key) async =>
-      getAllLetsPlaySnapshot(key);
+  Future<DataSnapshot> entitySnapshotFunction(String? key) {
+    DatabaseReference letsPlayReference =
+        FirebaseDatabaseService().getReference("LetsPlay");
+    return letsPlayReference.get();
+  }
 
   @override
   String? getAdminIdFromSnapshot({required DataSnapshot snapshot}) =>
@@ -91,15 +94,27 @@ class LetsPlayRepository implements ChatRepository, DeleteRepository {
   }
 
   @override
-  Future<bool> deleteModel(String? key) async {
+  Future<bool> deleteModel({String? key, String? extraKey}) async {
     try {
       await FirebaseDatabaseService()
           .getReference("LetsPlay")
           .child(key!)
           .remove();
+      await FirebaseDatabaseService().getReference("Chat").child(key).remove();
       return true;
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  Future<void> deleteMessage(String uid, String teamId, String key) async {
+    await FirebaseDatabaseService()
+        .getReference("Chat")
+        .child(uid)
+        .child("MessageList")
+        .child(teamId)
+        .child(key)
+        .remove();
   }
 }

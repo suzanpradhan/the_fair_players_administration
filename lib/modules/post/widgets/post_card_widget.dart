@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:the_fair_players_administration/modules/core/ui/fair_players_icon_icons.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:the_fair_players_administration/modules/core/widgets/loader_widger.dart';
+import 'package:the_fair_players_administration/modules/post/blocs/get_user_post/get_user_post_bloc.dart';
 import 'package:the_fair_players_administration/modules/post/models/post_model.dart';
 
 import '../../core/theme/app_assets.dart';
@@ -7,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_constants.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/extensions/widget_extensions.dart';
+import '../../core/widgets/confirmation_dialog.dart';
 
 class PostCardWidget extends StatelessWidget {
   final PostModel postModel;
@@ -32,7 +35,13 @@ class PostCardWidget extends StatelessWidget {
                 style: AppTextStyles.textSemiBold.grey.m,
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ConfirmationDialog.showDeleteDialog(context, action: () {
+                      context
+                          .read<GetUserPostBloc>()
+                          .add(DeletePostAttempt(postModel: postModel));
+                    });
+                  },
                   icon: const Icon(
                     Icons.delete,
                     color: AppColors.redAccent,
@@ -42,17 +51,49 @@ class PostCardWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Container(
-            height: 280,
-            decoration: BoxDecoration(
-                image: DecorationImage(
+          (postModel.postImage != null)
+              ? ClipRRect(
+                  borderRadius: AppConstants.mediumBorderRadius,
+                  child: Image.network(
+                    postModel.postImage!,
+                    loadingBuilder: (BuildContext ctx, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return LoaderWidget(
+                          color: Theme.of(context).primaryColor,
+                        );
+                      }
+                    },
+                    height: 280,
+                    width: 380,
                     fit: BoxFit.cover,
-                    image: postModel.postImage != null
-                        ? NetworkImage(postModel.postImage!)
-                        : const AssetImage(AppAssets.noProfileImage)
-                            as ImageProvider),
-                borderRadius: AppConstants.mediumBorderRadius),
-          ),
+                  ),
+                )
+              : ClipRRect(
+                  borderRadius: AppConstants.mediumBorderRadius,
+                  child: Image.asset(
+                    AppAssets.noProfileImage,
+                    height: 280,
+                    width: 380,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+          // Container(
+          //   height: 280,
+          //   decoration: BoxDecoration(
+          //       image: DecorationImage(
+          //           fit: BoxFit.cover,
+          //           image: postModel.postImage != null
+          //               ? FadeInImage(
+          //                       placeholder:
+          //                           const AssetImage(AppAssets.noProfileImage),
+          //                       image: NetworkImage(postModel.postImage!))
+          //                   as ImageProvider
+          //               : const AssetImage(AppAssets.noProfileImage)),
+          //       borderRadius: AppConstants.mediumBorderRadius),
+          // ),
           const SizedBox(
             height: 8,
           ),
@@ -65,28 +106,29 @@ class PostCardWidget extends StatelessWidget {
           ),
           Row(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        FairPlayersIcon.trophy,
-                        color: Theme.of(context).iconTheme.color,
-                      )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        FairPlayersIcon.message,
-                        color: Theme.of(context).iconTheme.color,
-                      )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        FairPlayersIcon.share,
-                        color: Theme.of(context).iconTheme.color,
-                      ))
-                ],
-              ),
+              const SizedBox(),
+              // Row(
+              //   children: [
+              //     IconButton(
+              //         onPressed: () {},
+              //         icon: Icon(
+              //           FairPlayersIcon.trophy,
+              //           color: Theme.of(context).iconTheme.color,
+              //         )),
+              //     IconButton(
+              //         onPressed: () {},
+              //         icon: Icon(
+              //           FairPlayersIcon.message,
+              //           color: Theme.of(context).iconTheme.color,
+              //         )),
+              //     IconButton(
+              //         onPressed: () {},
+              //         icon: Icon(
+              //           FairPlayersIcon.share,
+              //           color: Theme.of(context).iconTheme.color,
+              //         ))
+              //   ],
+              // ),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,

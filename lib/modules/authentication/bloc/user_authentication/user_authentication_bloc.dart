@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:the_fair_players_administration/modules/authentication/services/firebase_authentication_service.dart';
 
 part 'user_authentication_event.dart';

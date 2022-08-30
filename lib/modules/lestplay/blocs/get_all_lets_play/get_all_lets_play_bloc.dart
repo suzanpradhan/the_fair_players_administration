@@ -50,7 +50,7 @@ class GetAllLetsPlayBloc
 
   _handleDeleteCompetitionsEvent(
       DeleteLetsPlayAttempt event, Emitter<GetAllLetsPlayState> emit) async {
-    letsPlayRepository.deleteModel(event.letsPlayModel.uid);
+    letsPlayRepository.deleteModel(key: event.letsPlayModel.uid);
     emit((state as GotAllLetsPlayState)
         .deleteCompetition(letsPlayModel: event.letsPlayModel));
   }

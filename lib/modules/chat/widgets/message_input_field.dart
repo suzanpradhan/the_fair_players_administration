@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,22 +47,11 @@ class _MessageInputFieldState extends State<MessageInputField> {
               hoverColor: AppColors.whiteShade,
               focusColor: AppColors.whiteShade,
               filled: true,
-              prefixIcon: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppConstants.pads),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.image_outlined,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
-                ),
-              ),
               suffixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.pads),
                 child: IconButton(
                   onPressed: () {
                     if (messageTextController.text.isNotEmpty) {
-                      log("here");
                       context.read<SendMessageBloc>().add(
                           SendAdminMessageAttempt(
                               messageModel: MessageModel(
@@ -80,6 +67,7 @@ class _MessageInputFieldState extends State<MessageInputField> {
                                       as GotChatRoomsSuccessState)
                                   .selectedChatRoom!
                                   .uid!));
+                      messageTextController.clear();
                     }
                   },
                   icon: const Icon(

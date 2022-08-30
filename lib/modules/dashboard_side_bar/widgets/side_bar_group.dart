@@ -5,7 +5,6 @@ import 'package:vrouter/vrouter.dart';
 import 'package:the_fair_players_administration/modules/core/theme/app_colors.dart';
 
 import '../../core/extensions/widget_extensions.dart';
-import '../../core/routes/app_routes.dart';
 
 class SideBarGroup extends StatefulWidget {
   final String route;
@@ -68,7 +67,7 @@ class _SideBarGroupState extends State<SideBarGroup> {
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 50),
+                        padding: const EdgeInsets.only(left: 34),
                         child: Icon(
                           widget.icon,
                           color: (context.vRouter.path.startsWith(widget.route))

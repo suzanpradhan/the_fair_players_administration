@@ -51,9 +51,7 @@ class _AllTeamsListState extends State<AllTeamsList> {
           child: BlocBuilder<GetAllTeamsBloc, GetAllTeamsState>(
             builder: (context, state) {
               return DashboardWrapper(
-                  appBar: const DashboardAppBar(
-                    isCountryFilterEnable: true,
-                  ),
+                  appBar: const DashboardAppBar(),
                   title: widget.title,
                   subtitle: widget.subtitle,
                   rightWidget: InkWell(

@@ -55,7 +55,7 @@ class GetAllCompetitionsBloc
 
   _handleDeleteCompetitionsEvent(DeleteCompetitionAttempt event,
       Emitter<GetAllCompetitionState> emit) async {
-    competitionsRepository.deleteModel(event.competitionModel.uid);
+    competitionsRepository.deleteModel(key: event.competitionModel.uid);
     emit((state as GotAllCompetitionState)
         .deleteCompetition(competition: event.competitionModel));
   }

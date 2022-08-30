@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:the_fair_players_administration/modules/competition/blocs/get_all_competitions/get_all_competitions_bloc.dart';
-import 'package:the_fair_players_administration/modules/competition/models/competition_model.dart';
 import 'package:the_fair_players_administration/modules/lestplay/blocs/get_all_lets_play/get_all_lets_play_bloc.dart';
 import 'package:the_fair_players_administration/modules/lestplay/models/letsplay_model.dart';
 import 'package:vrouter/vrouter.dart';
@@ -53,9 +51,7 @@ class _AllLetsPlayListState extends State<AllLetsPlayList> {
           child: BlocBuilder<GetAllLetsPlayBloc, GetAllLetsPlayState>(
             builder: (context, state) {
               return DashboardWrapper(
-                  appBar: const DashboardAppBar(
-                    isCountryFilterEnable: true,
-                  ),
+                  appBar: const DashboardAppBar(),
                   title: widget.title,
                   subtitle: widget.subtitle,
                   rightWidget: InkWell(
@@ -100,10 +96,6 @@ class _AllLetsPlayListState extends State<AllLetsPlayList> {
                           isLoaded: state is GotAllLetsPlayState,
                           headers: const [
                             DashboardDataHeaderWidget(
-                              title: "UID",
-                              flex: 1,
-                            ),
-                            DashboardDataHeaderWidget(
                               title: "Sport",
                               flex: 1,
                             ),
@@ -128,8 +120,8 @@ class _AllLetsPlayListState extends State<AllLetsPlayList> {
                           onDataTableScrollEnd: () {
                             if (state is GotAllLetsPlayState && state.hasMore) {
                               context
-                                  .read<GetAllCompetitionsBloc>()
-                                  .add(GetAllCompetitionAttempt());
+                                  .read<GetAllLetsPlayBloc>()
+                                  .add(GetAllLetsPlayAttempt());
                             }
                           },
                           itemBuilder: (context, index) {

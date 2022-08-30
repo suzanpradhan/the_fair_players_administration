@@ -21,6 +21,13 @@ class GotAllUsersState extends GetAllUsersState {
     return GotAllUsersState(
         listOfUsers: this.listOfUsers, hasMore: listOfUsers.isNotEmpty);
   }
+
+  GotAllUsersState deleteTeam({required UserModel team}) {
+    if (listOfUsers.isNotEmpty) {
+      listOfUsers.remove(team);
+    }
+    return GotAllUsersState(listOfUsers: listOfUsers, hasMore: hasMore);
+  }
 }
 
 class GetAllUsersFailedState extends GetAllUsersState {

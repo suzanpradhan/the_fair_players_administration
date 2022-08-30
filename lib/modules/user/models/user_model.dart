@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:intl/intl.dart';
 
 class UserModel {
@@ -34,22 +36,22 @@ class UserModel {
       this.town,
       this.uid});
 
-  factory UserModel.fromJson(Map<String, dynamic> jsonMapData) => UserModel(
-      uid: jsonMapData["uid"],
-      firstName: jsonMapData["firstName"],
-      lastName: jsonMapData["lastName"],
-      country: jsonMapData["country"],
-      dateOfBirth: (jsonMapData["dateOfBirth"] != null)
-          ? DateFormat("dd-MM-yyyy").parse(jsonMapData["dateOfBirth"])
-          : null,
-      email: jsonMapData["email"],
-      gender: jsonMapData["gender"],
-      image: jsonMapData["image"],
-      latitude: jsonMapData["latitude"],
-      longitude: jsonMapData["longitude"],
-      onlineStatus: jsonMapData["onlineStatus"],
-      totalClubs: jsonMapData["totalClubs"],
-      totalCompetitions: jsonMapData["totalCompetitions"],
-      totalTeams: jsonMapData["totalTeams"],
-      town: jsonMapData["town"]);
+  factory UserModel.fromJson(Map<String, dynamic> jsonMapData) {
+    return UserModel(
+        uid: jsonMapData["uid"],
+        firstName: jsonMapData["firstName"],
+        lastName: jsonMapData["lastName"],
+        country: jsonMapData["country"],
+        dateOfBirth: null,
+        email: jsonMapData["email"],
+        gender: jsonMapData["gender"],
+        image: jsonMapData["image"],
+        latitude: jsonMapData["latitude"],
+        longitude: jsonMapData["longitude"],
+        onlineStatus: jsonMapData["onlineStatus"],
+        totalClubs: jsonMapData["totalClubs"],
+        totalCompetitions: jsonMapData["totalCompetitions"],
+        totalTeams: jsonMapData["totalTeams"],
+        town: jsonMapData["town"]);
+  }
 }

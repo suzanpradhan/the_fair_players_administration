@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:the_fair_players_administration/modules/core/widgets/confirmation_dialog.dart';
+import 'package:the_fair_players_administration/modules/user/blocs/get_all_users/get_all_users_bloc.dart';
 import 'package:vrouter/vrouter.dart';
 
 import '../../core/routes/app_routes.dart';
@@ -29,17 +32,25 @@ class UserCardWidget extends DashboardDataGroupWidget {
                 padding: EdgeInsets.symmetric(horizontal: AppConstants.padxs),
                 child: Row(
                   children: [
-                    Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
+                    (listOfUsers[index].image != null)
+                        ? ClipRRect(
                             borderRadius: BorderRadius.circular(42),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: (listOfUsers[index].image != null)
-                                    ? NetworkImage(listOfUsers[index].image!)
-                                    : const AssetImage(AppAssets.noProfileImage)
-                                        as ImageProvider))),
+                            child: FadeInImage.assetNetwork(
+                              width: 42,
+                              height: 42,
+                              placeholder: AppAssets.noProfileImage,
+                              image: listOfUsers[index].image!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(42),
+                            child: Image.asset(
+                              width: 42,
+                              height: 42,
+                              AppAssets.noProfileImage,
+                              fit: BoxFit.cover,
+                            )),
                     SizedBox(
                       width: AppConstants.pads,
                     ),
@@ -83,6 +94,34 @@ class UserCardWidget extends DashboardDataGroupWidget {
                         onTap: () {
                           context.vRouter.toSegments([
                             segment,
+                            CHAT_SEGMENT,
+                            ALL_SEGMENT
+                          ], queryParameters: {
+                            "room": listOfUsers[index].uid.toString()
+                          });
+                        },
+                        height: 32,
+                        child: Row(
+                          children: [
+                            Icon(
+                              FairPlayersIcon.message,
+                              color: Theme.of(context).iconTheme.color,
+                              size: 18,
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              "View Chats",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            )
+                          ],
+                        )),
+                    const PopupMenuDivider(),
+                    PopupMenuItem(
+                        onTap: () {
+                          context.vRouter.toSegments([
+                            segment,
                             POST_SEGMENT,
                             ALL_SEGMENT
                           ], queryParameters: {
@@ -110,6 +149,14 @@ class UserCardWidget extends DashboardDataGroupWidget {
                         )),
                     const PopupMenuDivider(),
                     PopupMenuItem(
+                        onTap: () {
+                          ConfirmationDialog.showDeleteDialog(context,
+                              action: () {
+                            context.read<GetAllUsersBloc>().add(
+                                DeleteUserAttempt(
+                                    userModel: listOfUsers[index]));
+                          });
+                        },
                         height: 32,
                         child: Row(
                           children: [

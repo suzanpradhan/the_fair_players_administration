@@ -44,7 +44,7 @@ class DashboardSideBar extends StatelessWidget {
                     isSegment: true,
                     route: "/$USER_SEGMENT",
                     title: "Users",
-                    icon: Icons.person),
+                    icon: FairPlayersIcon.person),
                 const SideBarItem(
                   isSegment: true,
                   route: "/$TEAM_SEGMENT/$USER_SEGMENT",
@@ -79,7 +79,7 @@ class DashboardSideBar extends StatelessWidget {
                       isSegment: true,
                       route: "/$CHAT_SEGMENT/$TEAM_SEGMENT",
                       title: "Teams",
-                      icon: Icons.person,
+                      icon: FairPlayersIcon.person,
                     ),
                     SideBarItem(
                       isSegment: true,
@@ -110,7 +110,7 @@ class DashboardSideBar extends StatelessWidget {
                 builder: (context, state) {
                   return SideBarItem(
                     isSegment: true,
-                    route: "/$CHAT_SEGMENT/",
+                    route: "/logout",
                     title: "Log Out",
                     icon: FairPlayersIcon.logout,
                     color: AppColors.redAccent,

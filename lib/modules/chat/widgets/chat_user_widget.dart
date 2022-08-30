@@ -1,3 +1,4 @@
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_fair_players_administration/modules/chat/blocs/chat_navigation/chat_navigation_bloc.dart';
@@ -42,14 +43,35 @@ class ChatUserWidget extends StatelessWidget {
                       : AppColors.greyLight)),
           child: Row(
             children: [
-              Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
+              (chatRoomModel.chatRoomImage != null)
+                  ? ClipRRect(
                       borderRadius: BorderRadius.circular(42),
-                      image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(AppAssets.noProfileImage)))),
+                      child: FadeInImage.assetNetwork(
+                        width: 42,
+                        height: 42,
+                        placeholder: AppAssets.noProfileImage,
+                        image: chatRoomModel.chatRoomImage!,
+                        fit: BoxFit.cover,
+                        imageErrorBuilder: (context, object, stackTrace) {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(42),
+                              child: Image.asset(
+                                width: 42,
+                                height: 42,
+                                AppAssets.noProfileImage,
+                                fit: BoxFit.cover,
+                              ));
+                        },
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(42),
+                      child: Image.asset(
+                        width: 42,
+                        height: 42,
+                        AppAssets.noProfileImage,
+                        fit: BoxFit.cover,
+                      )),
               const SizedBox(
                 width: 12,
               ),
@@ -81,35 +103,37 @@ class ChatUserWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  //TODO: Readable Time
                   Text(
-                    "TIME",
+                    (chatRoomModel.dateTime != null)
+                        ? DateTimeFormat.relative(chatRoomModel.dateTime!,
+                            appendIfAfter: 'ago')
+                        : "",
                     style: Theme.of(context).textTheme.labelSmall!.primary,
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  (chatRoomModel.notifyCount != null)
-                      ? Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(34),
-                              color: AppColors.greenLight),
-                          child: Center(
-                            child: Text(
-                              chatRoomModel.notifyCount.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
-                                  .accent,
-                            ),
-                          ),
-                        )
-                      : const SizedBox(
-                          width: 34,
-                          height: 34,
-                        )
+                  // (chatRoomModel.notifyCount != null)
+                  //     ? Container(
+                  //         width: 34,
+                  //         height: 34,
+                  //         decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(34),
+                  //             color: AppColors.greenLight),
+                  //         child: Center(
+                  //           child: Text(
+                  //             chatRoomModel.notifyCount.toString(),
+                  //             style: Theme.of(context)
+                  //                 .textTheme
+                  //                 .labelSmall!
+                  //                 .accent,
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : const SizedBox(
+                  //         width: 34,
+                  //         height: 34,
+                  //       )
                 ],
               )
             ],

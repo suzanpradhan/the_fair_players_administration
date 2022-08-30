@@ -27,8 +27,7 @@ class FirebaseAuthenticationService {
   Future<Either<bool, Failure>> signInWithEmailAndPassword(
       {required email, required password}) async {
     try {
-      final UserCredential credential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
       return const Left(true);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

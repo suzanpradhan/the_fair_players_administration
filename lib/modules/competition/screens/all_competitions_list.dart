@@ -51,9 +51,7 @@ class _AllCompetitionsListState extends State<AllCompetitionsList> {
           child: BlocBuilder<GetAllCompetitionsBloc, GetAllCompetitionState>(
             builder: (context, state) {
               return DashboardWrapper(
-                  appBar: const DashboardAppBar(
-                    isCountryFilterEnable: true,
-                  ),
+                  appBar: const DashboardAppBar(),
                   title: widget.title,
                   subtitle: widget.subtitle,
                   rightWidget: InkWell(

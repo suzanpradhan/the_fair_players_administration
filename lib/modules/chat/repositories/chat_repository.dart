@@ -13,4 +13,5 @@ abstract class ChatRepository {
       {required MessageModel messageModel, required String teamId});
   Stream<DatabaseEvent> messageListStream(
       {required String uid, required String teamId});
+  Future<void> deleteMessage(String uid, String teamId, String key);
 }

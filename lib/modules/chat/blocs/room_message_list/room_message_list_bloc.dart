@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
@@ -15,9 +13,7 @@ class RoomMessageListBloc
   final ChatRepository chatRepository;
   RoomMessageListBloc({required this.chatRepository})
       : super(RoomMessageListInitial()) {
-    on<RoomMessageListEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<RoomMessageListEvent>((event, emit) {});
     on<GetRoomMessageList>((event, emit) async {
       String adminId =
           await chatRepository.getRoomAdminId(teamId: event.roomUid);

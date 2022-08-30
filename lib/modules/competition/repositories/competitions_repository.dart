@@ -43,8 +43,11 @@ class CompetitionsRepository implements ChatRepository, DeleteRepository {
   }
 
   @override
-  Future<DataSnapshot> entitySnapshotFunction(String? key) async =>
-      getAllCompetitionsSnapshot(key);
+  Future<DataSnapshot> entitySnapshotFunction(String? key) {
+    DatabaseReference competitionReference =
+        FirebaseDatabaseService().getReference("Competitions");
+    return competitionReference.get();
+  }
 
   @override
   String? getAdminIdFromSnapshot({required DataSnapshot snapshot}) =>
@@ -93,15 +96,36 @@ class CompetitionsRepository implements ChatRepository, DeleteRepository {
   }
 
   @override
-  Future<bool> deleteModel(String? key) async {
+  Future<bool> deleteModel({String? key, String? extraKey}) async {
     try {
       await FirebaseDatabaseService()
           .getReference("Competitions")
           .child(key!)
           .remove();
+      await FirebaseDatabaseService().getReference("Chat").child(key).remove();
+      await FirebaseDatabaseService()
+          .getReference("CompetitionPostComments")
+          .child(key)
+          .remove();
+      await FirebaseDatabaseService()
+          .getReference("CompetitionPosts")
+          .child(key)
+          .remove();
+
       return true;
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  Future<void> deleteMessage(String uid, String teamId, String key) async {
+    await FirebaseDatabaseService()
+        .getReference("Chat")
+        .child(uid)
+        .child("MessageList")
+        .child(teamId)
+        .child(key)
+        .remove();
   }
 }

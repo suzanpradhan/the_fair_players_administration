@@ -7,11 +7,13 @@ class MessageModel extends Equatable {
   final String? userImage;
   final String? userID;
   final String? userName;
+  final DateTime? dateTime;
 
   const MessageModel(
       {this.message,
       this.messageType,
       this.uid,
+      this.dateTime,
       this.userID,
       this.userImage,
       this.userName});
@@ -30,6 +32,9 @@ class MessageModel extends Equatable {
               ? jsonMapData["userImage"]
               : null,
           userName: jsonMapData["userName"],
+          dateTime: (jsonMapData["time"] != null)
+              ? DateTime.fromMillisecondsSinceEpoch(jsonMapData["time"].toInt())
+              : null,
           userID: jsonMapData["userID"]);
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +43,13 @@ class MessageModel extends Equatable {
         "messageType": messageType,
         "userName": userName,
         "userImage": userImage,
+        "time": DateTime.now().millisecondsSinceEpoch
+      };
+
+  Map<String, dynamic> toRecentMessageJson() => {
+        "message": message,
+        "messageType": messageType,
+        "time": DateTime.now().millisecondsSinceEpoch
       };
 
   copyWith({

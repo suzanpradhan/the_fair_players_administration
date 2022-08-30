@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:the_fair_players_administration/modules/core/routes/route_builde
 import 'package:the_fair_players_administration/modules/core/theme/app_theme.dart';
 import 'package:the_fair_players_administration/modules/lestplay/repositories/lets_play_repository.dart';
 import 'package:the_fair_players_administration/modules/team/repositories/team_repository.dart';
+import 'package:the_fair_players_administration/modules/user/repositories/user_repository.dart';
 import 'package:vrouter/vrouter.dart';
 import 'dart:developer';
 
@@ -54,7 +54,8 @@ class MyApp extends StatelessWidget {
             ),
             RepositoryProvider(create: (context) => ClubRepository()),
             RepositoryProvider(create: (context) => CompetitionsRepository()),
-            RepositoryProvider(create: (context) => LetsPlayRepository())
+            RepositoryProvider(create: (context) => LetsPlayRepository()),
+            RepositoryProvider(create: (context) => UserRepository())
           ],
           child: BlocProvider(
             lazy: false,

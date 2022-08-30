@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../repositories/analytic_repository.dart';
 
 part 'analytic_dates_event.dart';
 part 'analytic_dates_state.dart';
@@ -12,7 +16,7 @@ class AnalyticDatesBloc extends Bloc<AnalyticDatesEvent, AnalyticDatesState> {
                 .subtract(const Duration(days: 30))
                 .millisecondsSinceEpoch
                 .toDouble())) {
-    on<AnalyticDatesEvent>((event, emit) {
+    on<AnalyticDatesEvent>((event, emit) async {
       emit(AnalyticDatesState(
           title: "last 30 days",
           startAtTimeStamp: DateTime.now()
@@ -38,5 +42,7 @@ class AnalyticDatesBloc extends Bloc<AnalyticDatesEvent, AnalyticDatesState> {
             .subtract(const Duration(days: 30))
             .millisecondsSinceEpoch
             .toDouble())));
+    on<ChangeCountryAnalytic>(
+        (event, emit) => emit(state.filterByCountry(event.country)));
   }
 }

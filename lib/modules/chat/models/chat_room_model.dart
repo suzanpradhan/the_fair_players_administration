@@ -7,12 +7,14 @@ class ChatRoomModel extends Equatable {
   final String? messageType;
   final int? notifyCount;
   final String? chatRoomImage;
+  final DateTime? dateTime;
 
   const ChatRoomModel({
     this.uid,
     this.name,
     this.recentMessage,
     this.messageType,
+    this.dateTime,
     this.notifyCount,
     this.chatRoomImage,
   });
@@ -27,8 +29,10 @@ class ChatRoomModel extends Equatable {
         name: jsonMapData["name"],
         recentMessage: jsonMapData["message"],
         messageType: jsonMapData["messageType"],
-        notifyCount: jsonMapData["notifyCount"],
         chatRoomImage: jsonMapData["chatRoomImage"],
+        dateTime: (jsonMapData["time"] != null)
+            ? DateTime.fromMillisecondsSinceEpoch(jsonMapData["time"].toInt())
+            : null,
       );
 
   factory ChatRoomModel.fromClubJson(
@@ -37,6 +41,14 @@ class ChatRoomModel extends Equatable {
         uid: key,
         name: jsonMapData["clubName"],
         chatRoomImage: jsonMapData["clubImage"],
+      );
+
+  factory ChatRoomModel.fromUserProfileJson(
+          Map<String, dynamic> jsonMapData, String? key) =>
+      ChatRoomModel(
+        uid: key,
+        name: "${jsonMapData["firstName"]} ${jsonMapData["lastName"]}",
+        chatRoomImage: jsonMapData["image"],
       );
 
   factory ChatRoomModel.fromCompetitionJson(
@@ -50,4 +62,11 @@ class ChatRoomModel extends Equatable {
   factory ChatRoomModel.fromLetsPlayJson(
           Map<String, dynamic> jsonMapData, String? key) =>
       ChatRoomModel(uid: key, name: jsonMapData["sports"]);
+
+  Map<String, dynamic> toJsonForAdminUserChat() => {
+        "name": "Admin",
+        "message": recentMessage,
+        "messageType": messageType,
+        "time": DateTime.now().millisecondsSinceEpoch
+      };
 }

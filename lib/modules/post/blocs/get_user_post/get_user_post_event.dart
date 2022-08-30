@@ -22,3 +22,11 @@ class GetAllUserPostAttempt extends GetUserPostEvent {
   @override
   List<Object> get props => [uid];
 }
+
+class DeletePostAttempt extends GetUserPostEvent {
+  final PostModel postModel;
+  const DeletePostAttempt({required this.postModel});
+
+  @override
+  List<Object> get props => [postModel];
+}

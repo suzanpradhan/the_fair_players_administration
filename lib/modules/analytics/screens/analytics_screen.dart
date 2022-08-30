@@ -1,12 +1,13 @@
-import 'package:charts_flutter/flutter.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:the_fair_players_administration/modules/analytics/models/analytics_model.dart';
+import 'package:the_fair_players_administration/modules/analytics/repositories/analytic_repository.dart';
 import 'package:the_fair_players_administration/modules/analytics/widgets/analytic_card_widget.dart';
 import 'package:the_fair_players_administration/modules/analytics/widgets/horizontal_graph_widget.dart';
 import 'package:the_fair_players_administration/modules/analytics/widgets/vertical_graph_widget.dart';
-import 'package:the_fair_players_administration/modules/core/theme/app_colors.dart';
 import 'package:the_fair_players_administration/modules/core/theme/app_constants.dart';
 import 'package:the_fair_players_administration/modules/core/wrapper/dashboard_wrapper.dart';
 
@@ -32,75 +33,71 @@ class AnalyticsScreen extends StatelessWidget {
         subtitle: subtitle,
         rightWidget: BlocBuilder<AnalyticDatesBloc, AnalyticDatesState>(
           builder: (context, state) {
-            if (state is AnalyticDatesState) {
-              return PopupMenuButton<int>(
-                  offset: const Offset(0, 50),
-                  itemBuilder: ((context) {
-                    return [
-                      PopupMenuItem(
-                          onTap: () {
-                            context
-                                .read<AnalyticDatesBloc>()
-                                .add(ChangeToDayAnalytic());
-                          },
-                          height: 34,
-                          child: Text(
-                            "daily",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )),
-                      const PopupMenuDivider(),
-                      PopupMenuItem(
-                          onTap: () {
-                            context
-                                .read<AnalyticDatesBloc>()
-                                .add(ChangeToWeekAnalytic());
-                          },
-                          height: 34,
-                          child: Text(
-                            "last week",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )),
-                      const PopupMenuDivider(),
-                      PopupMenuItem(
-                          onTap: () {
-                            context
-                                .read<AnalyticDatesBloc>()
-                                .add(ChangeToMonthAnalytic());
-                          },
-                          height: 34,
-                          child: Text(
-                            "last 30 days",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          )),
-                    ];
-                  }),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: AppConstants.padr,
-                        vertical: AppConstants.pads),
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: AppConstants.regularBorderRadius),
-                    child: Row(
-                      children: [
-                        Text(
-                          state.title.toString(),
+            return PopupMenuButton<int>(
+                offset: const Offset(0, 50),
+                itemBuilder: ((context) {
+                  return [
+                    PopupMenuItem(
+                        onTap: () {
+                          context
+                              .read<AnalyticDatesBloc>()
+                              .add(ChangeToDayAnalytic());
+                        },
+                        height: 34,
+                        child: Text(
+                          "daily",
                           style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: Theme.of(context).iconTheme.color,
-                        )
-                      ],
-                    ),
-                  ));
-            } else {
-              return const SizedBox();
-            }
+                        )),
+                    const PopupMenuDivider(),
+                    PopupMenuItem(
+                        onTap: () {
+                          context
+                              .read<AnalyticDatesBloc>()
+                              .add(ChangeToWeekAnalytic());
+                        },
+                        height: 34,
+                        child: Text(
+                          "last week",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )),
+                    const PopupMenuDivider(),
+                    PopupMenuItem(
+                        onTap: () {
+                          context
+                              .read<AnalyticDatesBloc>()
+                              .add(ChangeToMonthAnalytic());
+                        },
+                        height: 34,
+                        child: Text(
+                          "last 30 days",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )),
+                  ];
+                }),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: AppConstants.padr,
+                      vertical: AppConstants.pads),
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: AppConstants.regularBorderRadius),
+                  child: Row(
+                    children: [
+                      Text(
+                        state.title.toString(),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Icon(
+                        Icons.arrow_drop_down_outlined,
+                        color: Theme.of(context).iconTheme.color,
+                      )
+                    ],
+                  ),
+                ));
           },
         ),
         child: SingleChildScrollView(
@@ -130,8 +127,9 @@ class AnalyticsScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return AnalyticCardWidget(
                               subtitle: listOfAnalysis[index].title,
-                              stream: listOfAnalysis[index]
-                                  .stream(timeszone: state.startAtTimeStamp),
+                              stream: listOfAnalysis[index].stream(
+                                  timeszone: state.startAtTimeStamp,
+                                  country: state.country),
                             );
                           }),
                     );

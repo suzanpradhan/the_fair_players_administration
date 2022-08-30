@@ -50,7 +50,7 @@ class GetAllTeamsBloc extends Bloc<GetAllTeamsEvent, GetAllTeamsState> {
 
   _handleDeleteTeamEvent(
       DeleteTeamAttempt event, Emitter<GetAllTeamsState> emit) async {
-    teamRepository.deleteModel(event.teamModel.uid);
+    teamRepository.deleteModel(key: event.teamModel.uid);
     emit((state as GotAllTeamsState).deleteTeam(team: event.teamModel));
   }
 }
