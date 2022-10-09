@@ -145,7 +145,7 @@ class ClubCardWidget extends DashboardDataGroupWidget {
                                 child: Row(
                                   children: [
                                     Icon(
-                                      FairPlayersIcon.plus,
+                                      FairPlayersIcon.message,
                                       color: Theme.of(context).iconTheme.color,
                                       size: 18,
                                     ),
