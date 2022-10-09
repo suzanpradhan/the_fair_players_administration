@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:the_fair_players_administration/modules/authentication/services/firebase_authentication_service.dart';
 import 'package:the_fair_players_administration/modules/chat/models/message_model.dart';
 import 'package:the_fair_players_administration/modules/chat/models/chat_room_model.dart';
+import 'package:the_fair_players_administration/modules/core/models/notification_model.dart';
 import 'package:the_fair_players_administration/modules/core/repositories/delete_repository.dart';
+import 'package:the_fair_players_administration/modules/core/services/push_notification_sender.dart';
 
 import '../../chat/repositories/chat_repository.dart';
 import '../../core/services/firebase_database_service.dart';
@@ -169,6 +172,25 @@ class UserRepository implements ChatRepository, DeleteRepository {
         .whenComplete(() {
       flag = true;
     });
+    if ((await entitySnapshotFunction(null))
+        .child(teamId)
+        .child("token")
+        .exists) {
+      PushNotificationSender.send(NotificationModel(
+          token: (await entitySnapshotFunction(null))
+              .child(teamId)
+              .child("token")
+              .value as String,
+          type: "Message",
+          senderName: "Admin",
+          senderUID: "admin",
+          senderImage: "",
+          title: "Message from Admin",
+          message: messageModel.message ?? "",
+          receiverUID: teamId,
+          receiverType: "user"));
+    }
+
     return flag;
   }
 }

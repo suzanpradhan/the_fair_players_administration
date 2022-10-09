@@ -5,63 +5,72 @@ import 'package:firebase_database/firebase_database.dart';
 import '../../core/services/firebase_database_service.dart';
 
 class AnalyticRepository {
-  static Stream<DatabaseEvent> getAllUsersStream(
-      {required double timeszone, String? country}) {
-    if (country != null) {
-      DatabaseReference userReference =
-          FirebaseDatabaseService().getReference("Users/Profile");
-      return userReference.orderByChild("country").equalTo(country).onValue;
-    } else {
-      DatabaseReference userReference =
-          FirebaseDatabaseService().getReference("Users/Profile");
+  static Stream<DatabaseEvent> getAllUsersStream({double? timeszone}) {
+    DatabaseReference userReference =
+        FirebaseDatabaseService().getReference("Users/Profile");
+    if (timeszone != null) {
       return userReference
           .orderByChild("createdAt")
           .startAt(timeszone)
           .endAt(DateTime.now().millisecondsSinceEpoch)
           .onValue;
+    } else {
+      return userReference.onValue;
     }
   }
 
-  static Stream<DatabaseEvent> getAllLetsPlayStream(
-      {required double timeszone, String? country}) {
-    return FirebaseDatabaseService()
-        .getReference("LetsPlay")
-        .orderByChild("date")
-        .startAt(timeszone)
-        .endAt(DateTime.now().millisecondsSinceEpoch)
-        .onValue;
+  static Stream<DatabaseEvent> getAllLetsPlayStream({double? timeszone}) {
+    if (timeszone != null) {
+      return FirebaseDatabaseService()
+          .getReference("LetsPlay")
+          .orderByChild("date")
+          .startAt(timeszone)
+          .endAt(DateTime.now().millisecondsSinceEpoch)
+          .onValue;
+    } else {
+      return FirebaseDatabaseService().getReference("LetsPlay").onValue;
+    }
   }
 
-  static Stream<DatabaseEvent> getAllClubStream(
-      {required double timeszone, String? country}) {
-    return FirebaseDatabaseService()
-        .getReference("Clubs")
-        .orderByChild("createdTime")
-        .startAt(timeszone)
-        .endAt(DateTime.now().millisecondsSinceEpoch)
-        .onValue;
+  static Stream<DatabaseEvent> getAllClubStream({double? timeszone}) {
+    if (timeszone != null) {
+      return FirebaseDatabaseService()
+          .getReference("Clubs")
+          .orderByChild("createdTime")
+          .startAt(timeszone)
+          .endAt(DateTime.now().millisecondsSinceEpoch)
+          .onValue;
+    } else {
+      return FirebaseDatabaseService().getReference("Clubs").onValue;
+    }
   }
 
-  static Stream<DatabaseEvent> getAllCompetitionStream(
-      {required double timeszone, String? country}) {
-    return FirebaseDatabaseService()
-        .getReference("Competitions")
-        .orderByChild("createdTime")
-        .startAt(timeszone)
-        .endAt(DateTime.now().millisecondsSinceEpoch)
-        .onValue;
+  static Stream<DatabaseEvent> getAllCompetitionStream({double? timeszone}) {
+    if (timeszone != null) {
+      return FirebaseDatabaseService()
+          .getReference("Competitions")
+          .orderByChild("createdTime")
+          .startAt(timeszone)
+          .endAt(DateTime.now().millisecondsSinceEpoch)
+          .onValue;
+    } else {
+      return FirebaseDatabaseService().getReference("Competitions").onValue;
+    }
   }
 
-  static Stream<DatabaseEvent> getAllTeamsStream(
-      {required double timeszone, String? country}) {
+  static Stream<DatabaseEvent> getAllTeamsStream({double? timeszone}) {
     log(DateTime.now().millisecondsSinceEpoch.toString(),
         name: "getAllTeamsStream");
-    return FirebaseDatabaseService()
-        .getReference("Teams")
-        .orderByChild("createdTime")
-        .startAt(timeszone)
-        .endAt(DateTime.now().millisecondsSinceEpoch)
-        .onValue;
+    if (timeszone != null) {
+      return FirebaseDatabaseService()
+          .getReference("Teams")
+          .orderByChild("createdTime")
+          .startAt(timeszone)
+          .endAt(DateTime.now().millisecondsSinceEpoch)
+          .onValue;
+    } else {
+      return FirebaseDatabaseService().getReference("Teams").onValue;
+    }
   }
 
   Future<Map> getMontlyUsers() async {

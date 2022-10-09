@@ -77,9 +77,15 @@ class DashboardSideBar extends StatelessWidget {
                   items: [
                     SideBarItem(
                       isSegment: true,
+                      route: "/$CHAT_SEGMENT/$USER_SEGMENT",
+                      title: "All Users",
+                      icon: FairPlayersIcon.person,
+                    ),
+                    SideBarItem(
+                      isSegment: true,
                       route: "/$CHAT_SEGMENT/$TEAM_SEGMENT",
                       title: "Teams",
-                      icon: FairPlayersIcon.person,
+                      icon: FairPlayersIcon.team,
                     ),
                     SideBarItem(
                       isSegment: true,

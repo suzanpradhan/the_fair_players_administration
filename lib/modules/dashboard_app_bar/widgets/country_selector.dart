@@ -15,19 +15,21 @@ class CountrySelectorWidget extends StatelessWidget {
     return BlocListener<AnalyticDatesBloc, AnalyticDatesState>(
       listener: (context, state) {
         log(state.country.toString(), name: "selectedCountry");
+        log(state.title.toString(), name: "selectedTitle");
       },
-      child: BlocBuilder<AnalyticDatesBloc, AnalyticDatesState>(
+      child: BlocBuilder<GetCountriesBloc, GetCountriesState>(
         builder: (context, state) {
-          return BlocBuilder<GetCountriesBloc, GetCountriesState>(
-            builder: (context, state) {
-              if (state is GotCountriesSuccessState) {
-                List<String> countries =
-                    state.countries.map((e) => e.value).toList();
-                countries.insert(0, "Select Country");
-                return SizedBox(
-                  width: 200,
-                  height: 50,
-                  child: DropdownSearch<String>(
+          if (state is GotCountriesSuccessState) {
+            List<String> countries =
+                state.countries.map((e) => e.value).toList();
+            countries.insert(0, "All Countries");
+            countries.insert(0, "Select Country");
+            return SizedBox(
+              width: 200,
+              height: 50,
+              child: BlocBuilder<AnalyticDatesBloc, AnalyticDatesState>(
+                builder: (context, analyticDateState) {
+                  return DropdownSearch<String>(
                     popupProps: PopupProps.menu(
                       showSelectedItems: true,
                       showSearchBox: true,
@@ -43,14 +45,14 @@ class CountrySelectorWidget extends StatelessWidget {
 
                       log(value.toString(), name: "dropdown");
                     },
-                    selectedItem: countries.first,
-                  ),
-                );
-              } else {
-                return const SizedBox();
-              }
-            },
-          );
+                    selectedItem: analyticDateState.country ?? countries.first,
+                  );
+                },
+              ),
+            );
+          } else {
+            return const SizedBox();
+          }
         },
       ),
     );

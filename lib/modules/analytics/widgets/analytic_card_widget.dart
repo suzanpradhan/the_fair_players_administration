@@ -9,8 +9,9 @@ import '../../core/theme/app_text_styles.dart';
 class AnalyticCardWidget extends StatelessWidget {
   final String subtitle;
   final Stream<DatabaseEvent> stream;
+  final String? country;
   const AnalyticCardWidget(
-      {Key? key, required this.subtitle, required this.stream})
+      {Key? key, required this.subtitle, required this.stream, this.country})
       : super(key: key);
 
   @override
@@ -33,7 +34,17 @@ class AnalyticCardWidget extends StatelessWidget {
               children: [
                 Text(
                     (snapshot.hasData)
-                        ? snapshot.data!.snapshot.children.length.toString()
+                        ? (snapshot.data!.snapshot.children.isEmpty)
+                            ? "0"
+                            : (country == null || country == "All Countries")
+                                ? snapshot.data!.snapshot.children.length
+                                    .toString()
+                                : snapshot.data!.snapshot.children
+                                    .where((element) =>
+                                        element.child("country").value ==
+                                        country!)
+                                    .length
+                                    .toString()
                         : "N/A",
                     style: AppTextStyles.textBold.accent.exxl),
                 const SizedBox(

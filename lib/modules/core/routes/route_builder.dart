@@ -107,19 +107,6 @@ List<VRouteElement> buildRoutes(BuildContext context) {
                                   ),
                           widget: const AllPostScreen(title: "All Post")),
                     ]),
-                VWidget.builder(
-                    path: "$CHAT_SEGMENT/$ALL_SEGMENT",
-                    buildTransition: (animation, secondaryAnimation, child) =>
-                        FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        ),
-                    builder: (BuildContext context, VRouterData vRouterData) {
-                      return ChatScreen(
-                          title: "All Chat List",
-                          subtitle: "Users",
-                          chatRepository: context.read<UserRepository>());
-                    })
               ]),
           VNester(
               path: "/$TEAM_SEGMENT",
@@ -378,6 +365,19 @@ List<VRouteElement> buildRoutes(BuildContext context) {
                         chatRepository: context.read<LetsPlayRepository>(),
                       );
                     }),
+                VWidget.builder(
+                    path: "$USER_SEGMENT/$ALL_SEGMENT",
+                    buildTransition: (animation, secondaryAnimation, child) =>
+                        FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        ),
+                    builder: (BuildContext context, VRouterData vRouterData) {
+                      return ChatScreen(
+                          title: "All Chat List",
+                          subtitle: "Users",
+                          chatRepository: context.read<UserRepository>());
+                    })
               ])
         ]),
   ];

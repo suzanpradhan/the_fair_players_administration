@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class ChatRoomModel extends Equatable {
   final String? uid;
@@ -67,6 +68,7 @@ class ChatRoomModel extends Equatable {
         "name": "Admin",
         "message": recentMessage,
         "messageType": messageType,
+        "notifyCount": ServerValue.increment(1),
         "time": DateTime.now().millisecondsSinceEpoch
       };
 }

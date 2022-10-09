@@ -72,6 +72,18 @@ class AnalyticsScreen extends StatelessWidget {
                           "last 30 days",
                           style: Theme.of(context).textTheme.bodyMedium,
                         )),
+                    const PopupMenuDivider(),
+                    PopupMenuItem(
+                        onTap: () {
+                          context
+                              .read<AnalyticDatesBloc>()
+                              .add(ChangeToAllAnalytic());
+                        },
+                        height: 34,
+                        child: Text(
+                          "all",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )),
                   ];
                 }),
                 child: Container(
@@ -127,9 +139,9 @@ class AnalyticsScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return AnalyticCardWidget(
                               subtitle: listOfAnalysis[index].title,
-                              stream: listOfAnalysis[index].stream(
-                                  timeszone: state.startAtTimeStamp,
-                                  country: state.country),
+                              country: state.country,
+                              stream: listOfAnalysis[index]
+                                  .stream(timeszone: state.startAtTimeStamp),
                             );
                           }),
                     );
