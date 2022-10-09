@@ -9,7 +9,9 @@ abstract class GetUserPostEvent extends Equatable {
 
 class GetAllUserPostFirstAttempt extends GetUserPostEvent {
   final String uid;
-  const GetAllUserPostFirstAttempt({required this.uid});
+  final PostType type;
+
+  const GetAllUserPostFirstAttempt({required this.uid, required this.type});
 
   @override
   List<Object> get props => [uid];
@@ -17,6 +19,7 @@ class GetAllUserPostFirstAttempt extends GetUserPostEvent {
 
 class GetAllUserPostAttempt extends GetUserPostEvent {
   final String uid;
+
   const GetAllUserPostAttempt({required this.uid});
 
   @override
@@ -25,7 +28,9 @@ class GetAllUserPostAttempt extends GetUserPostEvent {
 
 class DeletePostAttempt extends GetUserPostEvent {
   final PostModel postModel;
-  const DeletePostAttempt({required this.postModel});
+  final PostType postType;
+
+  const DeletePostAttempt({required this.postModel,required this.postType});
 
   @override
   List<Object> get props => [postModel];

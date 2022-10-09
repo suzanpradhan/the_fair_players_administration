@@ -148,6 +148,7 @@ class TeamRepository implements ChatRepository, DeleteRepository {
   @override
   Future<bool> deleteModel({String? key, String? extraKey}) async {
     try {
+      print("selected key is $key");
       DatabaseReference teamMembersReference = FirebaseDatabaseService()
           .getReference("Teams")
           .child(key!)
@@ -177,8 +178,10 @@ class TeamRepository implements ChatRepository, DeleteRepository {
           .getReference("TeamsPosts")
           .child(key)
           .remove();
+      print("112233, its done, deleted");
       return true;
     } catch (e) {
+      print("112233, error occured: $e");
       return false;
     }
   }

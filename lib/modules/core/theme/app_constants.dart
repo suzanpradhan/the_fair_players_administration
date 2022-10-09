@@ -14,5 +14,5 @@ class AppConstants {
   static BorderRadius largeBorderRadius = BorderRadius.circular(20);
   static BorderRadius mediumBorderRadius = BorderRadius.circular(10);
 
-  static int lazyLoadLength = 12;
+  static int lazyLoadLength = 1000;
 }

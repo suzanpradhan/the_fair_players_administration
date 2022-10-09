@@ -3,17 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_fair_players_administration/modules/core/widgets/loader_widger.dart';
 import 'package:the_fair_players_administration/modules/post/blocs/get_user_post/get_user_post_bloc.dart';
 import 'package:the_fair_players_administration/modules/post/models/post_model.dart';
+import 'package:video_thumbnail_imageview/video_thumbnail_imageview.dart';
 
+import '../../core/extensions/widget_extensions.dart';
+import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_assets.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_constants.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/extensions/widget_extensions.dart';
 import '../../core/widgets/confirmation_dialog.dart';
 
 class PostCardWidget extends StatelessWidget {
   final PostModel postModel;
-  const PostCardWidget({Key? key, required this.postModel}) : super(key: key);
+  final PostType postType;
+
+  const PostCardWidget(
+      {Key? key, required this.postModel, required this.postType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +43,8 @@ class PostCardWidget extends StatelessWidget {
               IconButton(
                   onPressed: () {
                     ConfirmationDialog.showDeleteDialog(context, action: () {
-                      context
-                          .read<GetUserPostBloc>()
-                          .add(DeletePostAttempt(postModel: postModel));
+                      context.read<GetUserPostBloc>().add(DeletePostAttempt(
+                          postModel: postModel, postType: postType));
                     });
                   },
                   icon: const Icon(
@@ -51,35 +56,45 @@ class PostCardWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          (postModel.postImage != null)
-              ? ClipRRect(
-                  borderRadius: AppConstants.mediumBorderRadius,
-                  child: Image.network(
-                    postModel.postImage!,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return LoaderWidget(
-                          color: Theme.of(context).primaryColor,
-                        );
-                      }
-                    },
-                    height: 280,
-                    width: 380,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : ClipRRect(
-                  borderRadius: AppConstants.mediumBorderRadius,
-                  child: Image.asset(
-                    AppAssets.noProfileImage,
-                    height: 280,
-                    width: 380,
-                    fit: BoxFit.cover,
-                  ),
+          if (postModel.postImage != null && postModel.type != "video")
+            Expanded(
+              child: ClipRRect(
+                borderRadius: AppConstants.mediumBorderRadius,
+                child: Image.network(
+                  postModel.postImage!,
+                  loadingBuilder: (BuildContext ctx, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return LoaderWidget(
+                        color: Theme.of(context).primaryColor,
+                      );
+                    }
+                  },
+                  height: 280,
+                  width: 380,
+                  fit: BoxFit.cover,
                 ),
+              ),
+            ),
+          if (postModel.postImage != null && postModel.type == "video")
+            Expanded(
+                child: VTImageView(
+              videoUrl: postModel.postImage!,
+              assetPlaceHolder: AppAssets.noProfileImage,
+            )),
+          /*: Expanded(
+                  child: ClipRRect(
+                    borderRadius: AppConstants.mediumBorderRadius,
+                    child: Image.asset(
+                      AppAssets.noProfileImage,
+                      height: 280,
+                      width: 380,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),*/
           // Container(
           //   height: 280,
           //   decoration: BoxDecoration(
@@ -97,10 +112,17 @@ class PostCardWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Text(
-            postModel.description ?? "N/A",
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+          if (postModel.description != null ||
+              postModel.description!.isNotEmpty ||
+              postModel.details != null ||
+              postModel.details!.isNotEmpty)
+            Text(
+              (postModel.description ?? "N/A").isNotEmpty
+                  ? postModel.description!
+                  : (postModel.details ?? "N/A"),
+              // postModel.description.isNotEmpty ? "" : "" ?? "N/A",
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
           const SizedBox(
             height: 12,
           ),
@@ -133,12 +155,12 @@ class PostCardWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("0 likes",
+                    Text("${postModel.likes ?? 0} likes",
                         style: Theme.of(context).textTheme.labelSmall),
                     const SizedBox(
                       width: 8,
                     ),
-                    Text("0 comments",
+                    Text("${postModel.comments ?? 0} comments",
                         style: Theme.of(context).textTheme.labelSmall),
                   ],
                 ),
