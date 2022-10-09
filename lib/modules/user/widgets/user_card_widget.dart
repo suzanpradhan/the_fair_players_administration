@@ -59,8 +59,7 @@ class UserCardWidget extends DashboardDataGroupWidget {
                       (listOfUsers[index].firstName == null &&
                               listOfUsers[index].lastName == null)
                           ? "N/A"
-                          : listOfUsers[index].firstName ??
-                              " ${listOfUsers[index].lastName ?? ""}",
+                          : "${listOfUsers[index].firstName} ${listOfUsers[index].lastName}",
                       style: Theme.of(context).textTheme.bodyMedium!,
                     ),
                   ],
