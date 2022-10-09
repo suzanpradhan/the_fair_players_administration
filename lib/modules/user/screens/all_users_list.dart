@@ -61,7 +61,7 @@ class _AllUsersListState extends State<AllUsersList> {
                 rightWidget: InkWell(
                   onTap: () {
                     context.vRouter.toSegments(
-                        [widget.segment, CHAT_SEGMENT, ALL_SEGMENT]);
+                        [CHAT_SEGMENT, widget.segment, ALL_SEGMENT]);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(

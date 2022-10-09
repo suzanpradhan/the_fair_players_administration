@@ -93,8 +93,8 @@ class UserCardWidget extends DashboardDataGroupWidget {
                     PopupMenuItem(
                         onTap: () {
                           context.vRouter.toSegments([
-                            segment,
                             CHAT_SEGMENT,
+                            segment,
                             ALL_SEGMENT
                           ], queryParameters: {
                             "room": listOfUsers[index].uid.toString()

@@ -61,11 +61,11 @@ class _ChatListAreaState extends State<ChatListArea> {
                     Expanded(
                       child: LazyScrollView(
                         onEndScroll: () {
-                          if (state.hasMore == true) {
-                            context
-                                .read<GetChatRoomsBloc>()
-                                .add(GetChatRoomsAttempt());
-                          }
+                          // if (state.hasMore == true) {
+                          //   context
+                          //       .read<GetChatRoomsBloc>()
+                          //       .add(GetChatRoomsAttempt());
+                          // }
                         },
                         child: ListView.builder(
                             shrinkWrap: true,
@@ -85,7 +85,8 @@ class _ChatListAreaState extends State<ChatListArea> {
                             }),
                       ),
                     ),
-                  if (context.vRouter.path.startsWith("/$USER_SEGMENT") &&
+                  if (context.vRouter.path.startsWith(
+                          "/$CHAT_SEGMENT/$USER_SEGMENT/$ALL_SEGMENT") &&
                       state is GotChatRoomsSuccessState &&
                       searchState is SearchChatRoomSuccessState)
                     Padding(
