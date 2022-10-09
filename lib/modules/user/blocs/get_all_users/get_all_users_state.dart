@@ -11,6 +11,7 @@ class GetAllUsersLoading extends GetAllUsersState {}
 class GotAllUsersState extends GetAllUsersState {
   final List<UserModel> listOfUsers;
   final bool hasMore;
+
   const GotAllUsersState({required this.listOfUsers, required this.hasMore});
 
   GotAllUsersState addListOfUsers(
@@ -32,5 +33,6 @@ class GotAllUsersState extends GetAllUsersState {
 
 class GetAllUsersFailedState extends GetAllUsersState {
   final String errorMessage;
+
   const GetAllUsersFailedState({required this.errorMessage});
 }

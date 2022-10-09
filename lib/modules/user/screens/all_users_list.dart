@@ -45,6 +45,7 @@ class _AllUsersListState extends State<AllUsersList> {
           if (state is GotAllUsersState) {
             setState(() {
               listOfUsers = state.listOfUsers;
+              listOfUsers.sort((a, b) => a.firstName?.compareTo(b.firstName!) ?? 0);
             });
           }
         },

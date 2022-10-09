@@ -223,7 +223,7 @@ List<VRouteElement> buildRoutes(BuildContext context) {
                         ),
                     widget: const AllCompetitionsList(
                       segment: COMPETITION_SEGMENT,
-                      title: "All Users",
+                      title: "All Competitions",
                       subtitle: "Competition",
                     )),
                 VWidget(

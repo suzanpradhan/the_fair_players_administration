@@ -11,3 +11,10 @@ const String LETS_PLAY_SEGMENT = "letsplay";
 const String ALL_SEGMENT = "all";
 const String POST_SEGMENT = "post";
 const String CHAT_SEGMENT = "chat";
+
+enum PostType {
+  user,
+  team,
+  club,
+  competition,
+}

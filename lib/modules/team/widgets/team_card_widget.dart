@@ -154,6 +154,36 @@ class TeamCardWidget extends DashboardDataGroupWidget {
                             const PopupMenuDivider(),
                           PopupMenuItem(
                               onTap: () {
+                                context.vRouter.toSegments([
+                                  segment,
+                                  POST_SEGMENT,
+                                  ALL_SEGMENT
+                                ], queryParameters: {
+                                  "user": listOfTeams[index].uid!,
+                                  "username": listOfTeams[index].teamName ?? "",
+                                  "type": PostType.team.name,
+                                });
+                              },
+                              height: 32,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FairPlayersIcon.plus,
+                                    color: Theme.of(context).iconTheme.color,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(
+                                    "View Posts",
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  )
+                                ],
+                              )),
+                          const PopupMenuDivider(),
+                          PopupMenuItem(
+                              onTap: () {
                                 ConfirmationDialog.showDeleteDialog(context,
                                     action: () {
                                   context.read<GetAllTeamsBloc>().add(
@@ -180,7 +210,7 @@ class TeamCardWidget extends DashboardDataGroupWidget {
                                         .danger,
                                   )
                                 ],
-                              ))
+                              )),
                         ];
                       },
                       child: Center(

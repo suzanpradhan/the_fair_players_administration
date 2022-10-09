@@ -145,7 +145,7 @@ class ClubCardWidget extends DashboardDataGroupWidget {
                                 child: Row(
                                   children: [
                                     Icon(
-                                      FairPlayersIcon.plus,
+                                      FairPlayersIcon.message,
                                       color: Theme.of(context).iconTheme.color,
                                       size: 18,
                                     ),
@@ -162,6 +162,36 @@ class ClubCardWidget extends DashboardDataGroupWidget {
                                 )),
                           if (snapshot.hasData && snapshot.data!)
                             const PopupMenuDivider(),
+                          PopupMenuItem(
+                              onTap: () {
+                                context.vRouter.toSegments([
+                                  segment,
+                                  POST_SEGMENT,
+                                  ALL_SEGMENT
+                                ], queryParameters: {
+                                  "user": listOfClubs[index].uid!,
+                                  "username": listOfClubs[index].clubName ?? "",
+                                  "type": PostType.club.name,
+                                });
+                              },
+                              height: 32,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    FairPlayersIcon.plus,
+                                    color: Theme.of(context).iconTheme.color,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(
+                                    "View Posts",
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  )
+                                ],
+                              )),
+                          const PopupMenuDivider(),
                           PopupMenuItem(
                               onTap: () {
                                 ConfirmationDialog.showDeleteDialog(context,
